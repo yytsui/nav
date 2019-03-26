@@ -106,6 +106,15 @@ class TestNetboxBulkParser(object):
             self.fail("No exception raised")
 
 
+class TestManagementProfileBulkParser(object):
+    def test_configuration_should_be_parsed(self):
+        data = b"SNMP v1 read profile:SNMP:version=1|community=public"
+        b = bulkparse.ManagementProfileBulkParser(data)
+        first_row = six.next(b)
+        assert 'configuration' in first_row
+        assert first_row['configuration'] == "version=1|community=public"
+
+
 class TestUsageBulkParser(object):
     def test_get_header(self):
         assert (

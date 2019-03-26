@@ -189,16 +189,29 @@ class NetboxBulkParser(BulkParser):
 
 
 class ManagementProfileBulkParser(BulkParser):
-    """Parses the netbox management profile bulk format"""
-    format = ('name', 'protocol')
-    required = 2
-    restkey = (
-        'snmp_community',
-        'ca_certificate',
-        'client_cert',
-        'username',
-        'password',
-    )
+    """Parses the netbox management profile bulk format.
+
+    The configuration attribute is a JSON attribute, but this cannot be fully
+    represented by the CSV-based bulk import/export format, so this will only
+    support simple "flat dictionaries", such as is used in some of the other
+    bulk formats.
+
+    """
+    format = ('name', 'protocol', 'configuration')
+    required = 3
+
+    @staticmethod
+    def _validate_configuration(configuration):
+        try:
+            if configuration:
+                items = (item.split('=', 1) for item in configuration.split('|'))
+                if items:
+                    dict(items)
+        except ValueError:
+            return False
+        else:
+            return True
+
 
 
 class UsageBulkParser(BulkParser):
