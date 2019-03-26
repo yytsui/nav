@@ -26,7 +26,7 @@ from nav.models.manage import Category, NetboxInfo, NetboxGroup
 from nav.models.manage import NetboxCategory, Interface
 from nav.models.manage import Location, Usage, NetboxType, Vendor
 from nav.models.manage import Prefix, Vlan, NetType
-from nav.models.manage import ManagementProfile
+from nav.models.manage import ManagementProfile, NetboxProfile
 from nav.models.cabling import Cabling, Patch
 from nav.models.service import Service, ServiceProperty
 from nav.util import is_valid_ip
@@ -95,13 +95,17 @@ class NetboxImporter(BulkImporter):
         if netboxgroups:
             objects.extend(netboxgroups)
 
+        profiles = self._get_management_profiles(
+            netbox, row.get('management_profiles', '')
+        )
+        if profiles:
+            objects.extend(profiles)
+
         return objects
 
     @staticmethod
     def _get_netbox_from_row(row):
-        netbox = Netbox(ip=row['ip'], read_only=row['ro'],
-                        read_write=row['rw'],
-                        snmp_version=row['snmp_version'] or 2)
+        netbox = Netbox(ip=row['ip'])
         netbox.room = get_object_or_fail(Room, id=row['roomid'])
         netbox.organization = get_object_or_fail(Organization, id=row['orgid'])
         netbox.category = get_object_or_fail(Category, id=row['catid'])
@@ -116,6 +120,19 @@ class NetboxImporter(BulkImporter):
                                                    sysname__startswith=master)
 
         return netbox
+
+    @staticmethod
+    def _get_management_profiles(netbox, profile_names):
+        profiles = profile_names.split('|')
+        profiles = [
+            get_object_or_fail(ManagementProfile, name=name)
+            for name in profiles
+            if name.strip()
+        ]
+        return [
+            NetboxProfile(netbox=netbox, profile=profile)
+            for profile in profiles
+        ]
 
     @staticmethod
     def _get_netboxinfo_from_function(netbox, function):

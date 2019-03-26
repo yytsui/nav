@@ -161,7 +161,7 @@ def validate_attribute_list(value):
 
 class NetboxBulkParser(BulkParser):
     """Parses the netbox bulk format"""
-    format = ('roomid', 'ip', 'orgid', 'catid', 'snmp_version', 'ro', 'rw',
+    format = ('roomid', 'ip', 'orgid', 'catid', 'management_profiles',
               'master', 'function', 'data')
     required = 4
     restkey = 'netboxgroup'
@@ -174,15 +174,6 @@ class NetboxBulkParser(BulkParser):
             return False
         else:
             return True
-
-    @staticmethod
-    def _validate_snmp_version(value):
-        if not value:
-            return True  # empty values are ok
-        try:
-            return int(value) in (1, 2)
-        except ValueError:
-            return False
 
     @staticmethod
     def _validate_data(datastring):
