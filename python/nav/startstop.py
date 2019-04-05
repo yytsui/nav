@@ -208,7 +208,7 @@ class DaemonService(Service):
                 stdout = stderr = None
 
             self.status = subprocess.call(list(shlex.split(command)),
-                                          stdout=stdout, stderr=stderr)
+                                          stdout=stdout, stderr=stderr, shell=True)
             return self.status == 0
 
 
