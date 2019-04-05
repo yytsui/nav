@@ -26,9 +26,11 @@ Install Editable source
   % docker-compose up postgres  graphite
  
 
- Run Daemon Process and Setup Cronjobs
+ Run Daemon Process and Setup cron jobs
  -------------------------------------
   % nav start
   % cd /tmp/ to check log files
+  % crontab -e to check cron jobs
+  % nav stop to stop daemon process and remove cron jobs
   
 
