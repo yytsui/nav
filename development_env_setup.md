@@ -14,6 +14,9 @@ Install Editable source
    
   % nav config where
   
+  % copy /Users/yiy/.local/etc/nav to ./conf and link it
+  % ln -s  /Users/yiy/.pyenv/versions/3.6.5/envs/p3nav/src/nav/conf /Users/yiy/.local/etc/nav
+  
   
  Run web server
  ---------------
