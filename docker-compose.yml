@@ -21,10 +21,15 @@ services:
       - postgres
   postgres:
     image: "postgres:9.4"
+    ports:
+      - "54320:5432"  # also set this port in db.conf
   graphite:
     build: ./tools/docker/graphite
     ports:
       - "8000:8000"
+      - "2003:2003/udp" # expose udp port as it was setup in graphite.conf
+      - "2003:2003/tcp"
+      - "2004:2004"
     volumes:
       - ./python/nav/etc/graphite/storage-schemas.conf:/opt/graphite/conf/storage-schemas.conf
       - ./python/nav/etc/graphite/storage-aggregation.conf:/opt/graphite/conf/storage-aggregation.conf
