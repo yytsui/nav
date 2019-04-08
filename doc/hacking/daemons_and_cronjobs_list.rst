@@ -25,6 +25,11 @@ statsystem.py statsensors.py statmulticast are triggered to run.
 check the 'handle' method is the class
 
 
+. send data to carbon
+check python/nav/ipdevpoll/plugins/statports.py line 88
+
+conf/logging.conf to set DEBUG level
+
 
 Daemons Process list
 ----------------------
