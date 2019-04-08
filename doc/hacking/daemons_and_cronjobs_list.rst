@@ -1,3 +1,30 @@
+ipdevpoll jobs
+---------------
+python bin/ipdevpolld -j
+> 1minstats
+> 5minstats
+> dns
+> inventory
+> ip2mac
+> snmpcheck
+> statuscheck
+> topo
+
+To debug, just run
+python bin/ipdevpolld -n 10.127.128.119 -J 1minstats
+
+so in conf/ipdevpoll.conf there are
+[job_1minstats]
+interval = 1m
+plugins = statsystem statsensors statmulticast
+
+...etc,
+
+which means in python/nav/ipdevpoll/plugins
+statsystem.py statsensors.py statmulticast are triggered to run.
+check the 'handle' method is the class
+
+
 
 Daemons Process list
 ----------------------
